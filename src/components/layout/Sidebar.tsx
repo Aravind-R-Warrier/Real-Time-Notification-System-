@@ -159,6 +159,41 @@ export default function Sidebar() {
             </svg>
           }
         />
+        <NavItem
+          to="/billing"
+          label="Billing & Subscription"
+          icon={
+            <svg viewBox="0 0 24 24" fill="none" className="w-full h-full">
+              <rect
+                x="2"
+                y="5"
+                width="20"
+                height="14"
+                rx="2"
+                ry="2"
+                stroke="currentColor"
+                strokeWidth="1.5"
+              />
+              <line
+                x1="2"
+                y1="10"
+                x2="22"
+                y2="10"
+                stroke="currentColor"
+                strokeWidth="1.5"
+              />
+              <line
+                x1="6"
+                y1="15"
+                x2="10"
+                y2="15"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+            </svg>
+          }
+        />
 
         <NavItem
           to="/settings"
@@ -213,7 +248,6 @@ export default function Sidebar() {
           />
         </nav>
       </div>
-      
     </aside>
   );
 
@@ -274,8 +308,12 @@ export default function Sidebar() {
                     M
                   </div>
                   <div>
-                    <div className="text-lg font-bold text-gray-900 dark:text-white">NexusDash</div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400">Analytics</div>
+                    <div className="text-lg font-bold text-gray-900 dark:text-white">
+                      NexusDash
+                    </div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">
+                      Analytics
+                    </div>
                   </div>
                 </div>
 
@@ -289,34 +327,23 @@ export default function Sidebar() {
               </div>
 
               <nav
-                className="flex flex-col gap-2"
+                className="flex flex-col gap-1"
                 aria-label="Mobile navigation"
               >
-                <NavItem
-                  to="/"
-                  end
-                  label="Dashboard"
-                  icon={<span className="w-5 h-5">{/* icon */}</span>}
-                />
-                <NavItem
-                  to="/analytics"
-                  label="Analytics"
-                  icon={<span className="w-5 h-5" />}
-                />
-                <NavItem
-                  to="/settings"
-                  label="Settings"
-                  icon={<span className="w-5 h-5" />}
-                />
+                <NavItem to="/" end label="Dashboard" />
+
+                <NavItem to="/analytics" label="Analytics" />
+
+                <NavItem to="/users" label="Users" />
+
+                <NavItem to="/billing" label="Billing & Subscription" />
+
+                <NavItem to="/settings" label="Settings" />
+
                 <div className="mt-4 border-t border-gray-100 dark:border-slate-800 pt-4">
-                  <NavItem
-                    to="/help"
-                    label="Help Center"
-                    icon={<span className="w-5 h-5" />}
-                  />
+                  <NavItem to="/help" label="Help Center" />
                 </div>
               </nav>
-              
             </motion.aside>
           </>
         )}

@@ -4,7 +4,7 @@ import { Routes, Route, BrowserRouter } from "react-router-dom";
 import AppShell from "../components/layout/AppShell";
 import Spinner from "../components/common/Spinner";
 import { SettingsProvider } from "../hooks/useSettings";
-import Footer from "../components/layout/Footer";
+import Billing from "../pages/Billing";
 
 const Dashboard = lazy(() => import("../pages/Dashboard"));
 const Analytics = lazy(() => import("../pages/Analytics"));
@@ -25,6 +25,7 @@ export default function AppRouter() {
               <Route path="/users" element={<Users />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/help" element={<HelpCenter />} />
+              <Route path="/billing" element={<Billing />} />
             </Routes>
           </Suspense>
         </AppShell>

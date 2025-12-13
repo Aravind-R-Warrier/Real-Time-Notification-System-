@@ -1,0 +1,73 @@
+{
+  "plans": [
+    {
+      "id": "free",
+      "name": "Free",
+      "priceMonthly": 0,
+      "priceYearly": 0,
+      "popular": false,
+      "features": [
+        "Up to 3 users",
+        "Basic analytics",
+        "Community support"
+      ]
+    },
+    {
+      "id": "pro",
+      "name": "Pro",
+      "priceMonthly": 29,
+      "priceYearly": 290,
+      "popular": true,
+      "features": [
+        "Up to 20 users",
+        "Advanced analytics",
+        "Priority support",
+        "CSV export"
+      ]
+    },
+    {
+      "id": "business",
+      "name": "Business",
+      "priceMonthly": 79,
+      "priceYearly": 790,
+      "popular": false,
+      "features": [
+        "Unlimited users",
+        "All analytics",
+        "Role-based access",
+        "API access",
+        "Dedicated support"
+      ]
+    }
+  ],
+  "subscription": {
+    "planId": "pro",
+    "billingCycle": "monthly",
+    "nextBillingDate": "2025-01-15",
+    "paymentMethod": {
+      "brand": "Visa",
+      "last4": "4242",
+      "expiry": "08/26"
+    }
+  },
+  "invoices": [
+    {
+      "id": "INV-001",
+      "date": "2024-12-01",
+      "amount": 29,
+      "status": "paid"
+    },
+    {
+      "id": "INV-002",
+      "date": "2024-11-01",
+      "amount": 29,
+      "status": "paid"
+    },
+    {
+      "id": "INV-003",
+      "date": "2024-10-01",
+      "amount": 29,
+      "status": "paid"
+    }
+  ]
+}

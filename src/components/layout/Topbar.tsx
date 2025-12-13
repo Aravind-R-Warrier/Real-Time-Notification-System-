@@ -47,10 +47,6 @@ export default function Topbar({ onToggleSidebar, onOpenNotifications }: Props) 
           </svg>
         </button>
 
-        <div > 
-          <h1 className="text-lg font-semibold leading-none text-gray-900 dark:text-gray-100">Dashboard</h1>
-          <div className="text-xs text-gray-500 dark:text-gray-300">Overview & insights</div>
-        </div>
       </div>
 
       <div className="flex items-center gap-3 relative">

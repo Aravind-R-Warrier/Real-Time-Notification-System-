@@ -120,7 +120,7 @@ export default function BarChartCard() {
               <div className="text-2xl font-bold text-gray-900 dark:text-white">{stats.total.toLocaleString()}</div>
             </div>
             <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg">
-              <div className="text-sm text-green-600 dark:text-green-400">Avg per Source</div>
+              <div className="text-sm text-green-600 dark:text-green-400">Avg pr Source</div>
               <div className="text-2xl font-bold text-gray-900 dark:text-white">{stats.average.toLocaleString()}</div>
             </div>
             <div className="bg-purple-50 dark:bg-purple-900/20 p-3 rounded-lg">

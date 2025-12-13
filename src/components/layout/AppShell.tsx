@@ -5,6 +5,7 @@ import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 import NotificationDrawer from "../notifications/NotificationDrawer";
 import { NotificationsProvider } from "../notifications/NotificationsProvider";
+import Footer from "./Footer";
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -20,10 +21,15 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           {/* Top Bar */}
           <Topbar onOpenNotifications={() => setDrawerOpen(true)} />
 
-          {/* Main Content */}
-          <main className="p-6 bg-gray-50 dark:bg-slate-900">
-            {children}
-          </main>
+            {/* Main Content */}
+          <div className="flex-1 flex flex-col">
+            <main className="flex-1 p-6 bg-gray-50 dark:bg-slate-900">
+              {children}
+            </main>
+            
+            {/* Footer */}
+            <Footer />
+          </div>
         </div>
       </div>
 
