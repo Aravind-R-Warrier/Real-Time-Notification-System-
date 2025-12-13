@@ -123,7 +123,7 @@ class SignupSourcesService {
         percentage: Math.round((Math.random() * 5) * 10) / 10
       }));
       this.notifySubscribers();
-    }, 30000);
+    }, 20000);
   }
 }
 

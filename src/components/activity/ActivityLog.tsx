@@ -178,7 +178,7 @@ export default function ActivityLog({
 
   return (
     <Card
-      title="Activity Log"
+      title="Live Activity Log"
       action={
         <div className="flex gap-2">
           <Button

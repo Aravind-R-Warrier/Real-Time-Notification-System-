@@ -2,7 +2,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import NotificationBell from "../notifications/NotificationBell";
-import { ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 type Props = {
@@ -68,7 +67,6 @@ export default function Topbar({ onToggleSidebar, onOpenNotifications }: Props) 
               A
             </div>
             <span className="hidden sm:inline-block text-sm text-gray-700 dark:text-gray-200">Aravind</span>
-            <ChevronDown className="w-4 h-4 text-gray-500 dark:text-gray-300" />
           </button>
 
           <AnimatePresence>

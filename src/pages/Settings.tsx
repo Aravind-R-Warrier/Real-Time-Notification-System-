@@ -2,13 +2,23 @@
 import React, { useEffect, useRef, useState } from "react";
 import Button from "../components/ui/Button";
 import { Card } from "../components/cards/Card";
-import { Bell, Moon, Sun, Volume2, VolumeX, LayoutGrid, Save, RotateCcw } from "lucide-react";
+import {
+  Bell,
+  Moon,
+  Sun,
+  Volume2,
+  VolumeX,
+  LayoutGrid,
+  Save,
+  RotateCcw,
+} from "lucide-react";
 import { useSettings } from "../hooks/useSettings";
 import { useNotifications } from "../components/notifications/useNotifications";
 import { motion } from "framer-motion";
 
 export default function Settings() {
-  const { settings, updateSettings, resetSettings, setTheme, setSoundVolume } = useSettings();
+  const { settings, updateSettings, resetSettings, setTheme, setSoundVolume } =
+    useSettings();
   const { playTestSound: playNotificationTestSound } = useNotifications();
   const [previewPlaying, setPreviewPlaying] = useState(false);
   const previewTimerRef = useRef<number | null>(null);
@@ -18,12 +28,15 @@ export default function Settings() {
       alert("Enable notifications first to hear the sound");
       return;
     }
-    
+
     setPreviewPlaying(true);
     playNotificationTestSound();
-    
+
     if (previewTimerRef.current) clearTimeout(previewTimerRef.current);
-    previewTimerRef.current = window.setTimeout(() => setPreviewPlaying(false), 800);
+    previewTimerRef.current = window.setTimeout(
+      () => setPreviewPlaying(false),
+      800
+    );
   };
 
   useEffect(() => {
@@ -45,7 +58,9 @@ export default function Settings() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Settings</h2>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+          Settings
+        </h2>
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
           Customize your dashboard experience
         </p>
@@ -58,15 +73,19 @@ export default function Settings() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700">
-                  {settings.theme === 'dark' ? (
+                  {settings.theme === "dark" ? (
                     <Moon className="w-5 h-5 text-gray-700 dark:text-gray-300" />
                   ) : (
                     <Sun className="w-5 h-5 text-gray-700 dark:text-gray-300" />
                   )}
                 </div>
                 <div>
-                  <div className="font-medium text-gray-900 dark:text-gray-100">Theme</div>
-                  <div className="text-sm text-gray-500 dark:text-gray-400">Choose your preferred theme</div>
+                  <div className="font-medium text-gray-900 dark:text-gray-100">
+                    Theme
+                  </div>
+                  <div className="text-sm text-gray-500 dark:text-gray-400">
+                    Choose your preferred theme
+                  </div>
                 </div>
               </div>
               <select
@@ -86,13 +105,19 @@ export default function Settings() {
                   <LayoutGrid className="w-5 h-5 text-gray-700 dark:text-gray-300" />
                 </div>
                 <div>
-                  <div className="font-medium text-gray-900 dark:text-gray-100">Layout Density</div>
-                  <div className="text-sm text-gray-500 dark:text-gray-400">Control spacing and layout</div>
+                  <div className="font-medium text-gray-900 dark:text-gray-100">
+                    Layout Density
+                  </div>
+                  <div className="text-sm text-gray-500 dark:text-gray-400">
+                    Control spacing and layout
+                  </div>
                 </div>
               </div>
               <select
                 value={settings.layoutDensity}
-                onChange={(e) => updateSettings({ layoutDensity: e.target.value as any })}
+                onChange={(e) =>
+                  updateSettings({ layoutDensity: e.target.value as any })
+                }
                 className="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-gray-100"
               >
                 <option value="comfortable">Comfortable</option>
@@ -111,15 +136,19 @@ export default function Settings() {
                   <Bell className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                 </div>
                 <div>
-                  <div className="font-medium text-gray-900 dark:text-gray-100">Enable Notifications</div>
-                  <div className="text-sm text-gray-500 dark:text-gray-400">Receive real-time updates</div>
+                  <div className="font-medium text-gray-900 dark:text-gray-100">
+                    Enable Notifications
+                  </div>
+                  <div className="text-sm text-gray-500 dark:text-gray-400">
+                    Receive real-time updates
+                  </div>
                 </div>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input
                   type="checkbox"
                   checked={settings.enableNotifications}
-                  onChange={() => toggleSetting('enableNotifications')}
+                  onChange={() => toggleSetting("enableNotifications")}
                   className="sr-only peer"
                 />
                 <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
@@ -136,22 +165,24 @@ export default function Settings() {
                   )}
                 </div>
                 <div>
-                  <div className="font-medium text-gray-900 dark:text-gray-100">Notification Sound</div>
-                  <div className="text-sm text-gray-500 dark:text-gray-400">Play sound for new notifications</div>
+                  <div className="font-medium text-gray-900 dark:text-gray-100">
+                    Notification Sound
+                  </div>
+                  <div className="text-sm text-gray-500 dark:text-gray-400">
+                    Play sound for new notifications
+                  </div>
                 </div>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input
                   type="checkbox"
                   checked={settings.playSound}
-                  onChange={() => toggleSetting('playSound')}
+                  onChange={() => toggleSetting("playSound")}
                   className="sr-only peer"
                 />
                 <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
               </label>
             </div>
-
-          
           </div>
         </Card>
       </div>
@@ -161,13 +192,19 @@ export default function Settings() {
         <div className="p-4 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/10 dark:to-indigo-900/10">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <div className="font-medium text-gray-900 dark:text-gray-100">Test Notification Sound</div>
+              <div className="font-medium text-gray-900 dark:text-gray-100">
+                Test Notification Sound
+              </div>
               <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                 Preview how notifications will sound when they arrive
               </div>
               <div className="flex items-center gap-2 mt-2 text-xs text-gray-500 dark:text-gray-400">
-                <div className={`w-2 h-2 rounded-full ${settings.playSound ? 'bg-green-500' : 'bg-gray-400'}`} />
-                {settings.playSound ? 'Sound enabled' : 'Sound disabled'}
+                <div
+                  className={`w-2 h-2 rounded-full ${
+                    settings.playSound ? "bg-green-500" : "bg-gray-400"
+                  }`}
+                />
+                {settings.playSound ? "Sound enabled" : "Sound disabled"}
               </div>
             </div>
             <div className="flex flex-col sm:flex-row gap-3">
@@ -197,25 +234,34 @@ export default function Settings() {
           )}
         </div>
       </Card>
-
       <div className="flex items-center gap-3">
         <Button
           variant="primary"
           onClick={() => {
             alert("Settings saved successfully!");
           }}
-          className="flex items-center gap-2"
+          className="
+      flex items-center gap-2
+      dark:bg-blue-600 dark:hover:bg-blue-700
+      dark:text-white
+    "
         >
           <Save className="w-4 h-4" />
           Save Changes
         </Button>
+
         <Button
           variant="outline"
           onClick={() => {
             resetSettings();
-            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.remove("dark");
           }}
-          className="flex items-center gap-2"
+          className="
+      flex items-center gap-2
+      dark:border-slate-600
+      dark:text-slate-200
+      dark:hover:bg-slate-700
+    "
         >
           <RotateCcw className="w-4 h-4" />
           Reset to Defaults
