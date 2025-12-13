@@ -1,0 +1,146 @@
+[
+  {
+    "time": "00:00",
+    "value": 1250,
+    "region": "North America",
+    "device": "Desktop"
+  },
+  {
+    "time": "01:00",
+    "value": 1180,
+    "region": "North America",
+    "device": "Mobile"
+  },
+  {
+    "time": "02:00",
+    "value": 1020,
+    "region": "Europe",
+    "device": "Desktop"
+  },
+  {
+    "time": "03:00",
+    "value": 890,
+    "region": "Europe",
+    "device": "Mobile"
+  },
+  {
+    "time": "04:00",
+    "value": 760,
+    "region": "Asia",
+    "device": "Desktop"
+  },
+  {
+    "time": "05:00",
+    "value": 820,
+    "region": "Asia",
+    "device": "Mobile"
+  },
+  {
+    "time": "06:00",
+    "value": 1240,
+    "region": "North America",
+    "device": "Desktop"
+  },
+  {
+    "time": "07:00",
+    "value": 1560,
+    "region": "North America",
+    "device": "Mobile"
+  },
+  {
+    "time": "08:00",
+    "value": 1980,
+    "region": "Europe",
+    "device": "Desktop"
+  },
+  {
+    "time": "09:00",
+    "value": 2340,
+    "region": "Europe",
+    "device": "Mobile"
+  },
+  {
+    "time": "10:00",
+    "value": 2870,
+    "region": "Asia",
+    "device": "Desktop"
+  },
+  {
+    "time": "11:00",
+    "value": 3120,
+    "region": "Asia",
+    "device": "Mobile"
+  },
+  {
+    "time": "12:00",
+    "value": 2980,
+    "region": "North America",
+    "device": "Desktop"
+  },
+  {
+    "time": "13:00",
+    "value": 2670,
+    "region": "North America",
+    "device": "Mobile"
+  },
+  {
+    "time": "14:00",
+    "value": 2450,
+    "region": "Europe",
+    "device": "Desktop"
+  },
+  {
+    "time": "15:00",
+    "value": 2780,
+    "region": "Europe",
+    "device": "Mobile"
+  },
+  {
+    "time": "16:00",
+    "value": 3120,
+    "region": "Asia",
+    "device": "Desktop"
+  },
+  {
+    "time": "17:00",
+    "value": 3450,
+    "region": "Asia",
+    "device": "Mobile"
+  },
+  {
+    "time": "18:00",
+    "value": 3890,
+    "region": "North America",
+    "device": "Desktop"
+  },
+  {
+    "time": "19:00",
+    "value": 4120,
+    "region": "North America",
+    "device": "Mobile"
+  },
+  {
+    "time": "20:00",
+    "value": 3980,
+    "region": "Europe",
+    "device": "Desktop"
+  },
+  {
+    "time": "21:00",
+    "value": 3560,
+    "region": "Europe",
+    "device": "Mobile"
+  },
+  {
+    "time": "22:00",
+    "value": 2980,
+    "region": "Asia",
+    "device": "Desktop"
+  },
+  {
+    "time": "23:00",
+    "value": 2450,
+    "region": "Asia",
+    "device": "Mobile"
+  }
+]

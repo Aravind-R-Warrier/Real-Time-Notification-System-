@@ -1,12 +1,9 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
+import './index.css';
 
-/**
- * Entry point (Vite)
- * - Wrap in StrictMode for dev-time warnings
- * - Import global CSS (tailwind + tokens) here
- */
+
 
 const container = document.getElementById("root");
 

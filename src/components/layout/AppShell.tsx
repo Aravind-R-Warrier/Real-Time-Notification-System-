@@ -1,3 +1,5 @@
+// src/components/layout/AppShell.tsx
+
 import React, { useState } from "react";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
@@ -9,16 +11,27 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <NotificationsProvider>
-      <div className="min-h-screen bg-gray-50 flex">
+      <div className="min-h-screen flex bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-gray-100">
+        {/* Sidebar */}
         <Sidebar />
+
+        {/* Right side */}
         <div className="flex-1 flex flex-col">
+          {/* Top Bar */}
           <Topbar onOpenNotifications={() => setDrawerOpen(true)} />
-          <main className="p-6">
+
+          {/* Main Content */}
+          <main className="p-6 bg-gray-50 dark:bg-slate-900">
             {children}
           </main>
         </div>
       </div>
-      <NotificationDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+
+      {/* Notification Drawer */}
+      <NotificationDrawer
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+      />
     </NotificationsProvider>
   );
 }

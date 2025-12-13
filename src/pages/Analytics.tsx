@@ -1,217 +1,200 @@
-import React, { useEffect, useMemo, useState } from "react";
+// src/pages/Analytics.tsx
+import React, { useState, useEffect } from "react";
+import { Card } from "../components/cards/Card";
+import Button from "../components/ui/Button";
+import { 
+  Download, Filter, Calendar, TrendingUp, Users, 
+  DollarSign, MousePointer, RefreshCw 
+} from "lucide-react";
 import LineChartCard from "../components/analytics/LineChartCard";
 import BarChartCard from "../components/analytics/BarChartCard";
-import Button from "../components/ui/Button";
-import { fetchMockLineData, fetchMockBarData } from "../api/mock/analytics";
-import { Card } from "../components/cards/Card";
+import { fetchAnalyticsBundle } from "../api/mock/analytics";
 
-/**
- * Analytics Page — Final Production Version
- */
-
-type RangeOption = "24h" | "7d" | "30d";
-
-function toCSV(rows: Record<string, any>[]) {
-  if (!rows || rows.length === 0) return "";
-  const keys = Object.keys(rows[0]);
-  const header = keys.join(",");
-  const lines = rows.map((r) =>
-    keys.map((k) => JSON.stringify(r[k] ?? "")).join(",")
-  );
-  return [header, ...lines].join("\n");
-}
+type DateRange = 'today' | 'week' | 'month' | 'quarter';
 
 export default function Analytics() {
-  const [range, setRange] = useState<RangeOption>("7d");
-  const [showGrid, setShowGrid] = useState(true);
-
-  const [lineData, setLineData] = useState(() => fetchMockLineData());
-  const [barData, setBarData] = useState(() => fetchMockBarData());
-
+  const [range, setRange] = useState<DateRange>('week');
   const [loading, setLoading] = useState(false);
+  const [analytics, setAnalytics] = useState<any>(null);
 
-  // Fetch & update data when range changes
   useEffect(() => {
-    setLoading(true);
-
-    const timer = setTimeout(() => {
-      if (range === "24h") {
-        setLineData([
-          { time: "00:00", value: 12 },
-          { time: "04:00", value: 18 },
-          { time: "08:00", value: 28 },
-          { time: "12:00", value: 22 },
-          { time: "16:00", value: 30 },
-          { time: "20:00", value: 24 },
-        ]);
-
-        setBarData([
-          { name: "Mon", count: 8 },
-          { name: "Tue", count: 12 },
-          { name: "Wed", count: 6 },
-          { name: "Thu", count: 10 },
-          { name: "Fri", count: 9 },
-        ]);
-      } else if (range === "7d") {
-        setLineData(fetchMockLineData());
-        setBarData(fetchMockBarData());
-      } else {
-        // 30 days — amplify the trend
-        setLineData(
-          fetchMockLineData().map((d, i) => ({
-            ...d,
-            value: (d as any).value + i * 5,
-          }))
-        );
-
-        setBarData(
-          fetchMockBarData().map((d, i) => ({
-            ...d,
-            count: (d as any).count + i * 3,
-          }))
-        );
-      }
-
-      setLoading(false);
-    }, 600);
-
-    return () => clearTimeout(timer);
+    loadAnalytics();
   }, [range]);
 
-  // CSV export
-  const aggregatedCSV = useMemo(() => {
-    const merged = [
-      ...lineData.map((r) => ({ type: "line", ...r })),
-      ...barData.map((r) => ({ type: "bar", ...r })),
-    ];
-    return toCSV(merged);
-  }, [lineData, barData]);
+  const loadAnalytics = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setAnalytics(fetchAnalyticsBundle());
+      setLoading(false);
+    }, 600);
+  };
 
-  function handleExportCSV() {
-    if (!aggregatedCSV) return;
-
-    const blob = new Blob([aggregatedCSV], {
-      type: "text/csv;charset=utf-8;",
-    });
-
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-
-    a.href = url;
-    a.download = `analytics-${range}.csv`;
-    a.click();
-
-    URL.revokeObjectURL(url);
-  }
+  const handleExport = () => {
+    // Mock export functionality
+    alert(`Exporting analytics data for ${range} range...`);
+  };
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-semibold">Analytics</h2>
-          <p className="text-sm text-gray-500 mt-1">
-            Overview of recent activity and trends.
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Analytics Dashboard</h2>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            Detailed insights and metrics for your SaaS platform
           </p>
         </div>
 
-        {/* Controls row */}
         <div className="flex items-center gap-3">
-          {/* Range Select */}
-          <div className="flex items-center gap-2 bg-white rounded-md p-2 shadow-sm">
-            <label className="text-xs text-gray-600 mr-2">Range</label>
-
+          <div className="flex items-center gap-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2">
+            <Calendar className="w-4 h-4 text-gray-500" />
             <select
               value={range}
-              onChange={(e) => setRange(e.target.value as RangeOption)}
-              className="border px-2 py-1 rounded-md text-sm"
+              onChange={(e) => setRange(e.target.value as DateRange)}
+              className="bg-transparent text-sm text-gray-900 dark:text-gray-100 focus:outline-none"
             >
-              <option value="24h">Last 24 hours</option>
-              <option value="7d">Last 7 days</option>
-              <option value="30d">Last 30 days</option>
+              <option value="today">Today</option>
+              <option value="week">Last 7 days</option>
+              <option value="month">Last 30 days</option>
+              <option value="quarter">Last quarter</option>
             </select>
-          </div>
-
-          {/* Grid toggle */}
-          <div className="flex items-center gap-2 bg-white rounded-md p-2 shadow-sm">
-            <label className="text-sm">Grid</label>
-            <input
-              type="checkbox"
-              checked={showGrid}
-              onChange={(e) => setShowGrid(e.target.checked)}
-              className="h-4 w-4"
-            />
           </div>
 
           <Button
             variant="outline"
+            onClick={loadAnalytics}
             disabled={loading}
-            onClick={handleExportCSV}
+            className="flex items-center gap-2"
           >
-            Export CSV
+            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+            Refresh
+          </Button>
+
+          <Button
+            variant="primary"
+            onClick={handleExport}
+            className="flex items-center gap-2"
+          >
+            <Download className="w-4 h-4" />
+            Export
           </Button>
         </div>
       </div>
 
-      {/* Charts */}
+      {/* Key Metrics */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {[
+          {
+            title: "Conversion Rate",
+            value: `${analytics?.summary.conversionRate || 3.4}%`,
+            icon: <TrendingUp className="w-5 h-5" />,
+            change: "+0.8%",
+            color: "text-green-600 dark:text-green-400",
+          },
+          {
+            title: "Active Users",
+            value: analytics?.summary.activeUsers?.toLocaleString() || "1,842",
+            icon: <Users className="w-5 h-5" />,
+            change: "+8.3%",
+            color: "text-blue-600 dark:text-blue-400",
+          },
+          {
+            title: "Revenue",
+            value: `$${(analytics?.summary.revenue || 45230).toLocaleString()}`,
+            icon: <DollarSign className="w-5 h-5" />,
+            change: "+18.2%",
+            color: "text-yellow-600 dark:text-yellow-400",
+          },
+          {
+            title: "Click-through",
+            value: "2.8%",
+            icon: <MousePointer className="w-5 h-5" />,
+            change: "+1.2%",
+            color: "text-purple-600 dark:text-purple-400",
+          },
+        ].map((metric, index) => (
+          <Card key={index} className="dark:border-gray-700">
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">{metric.title}</div>
+                <div className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
+                  {metric.value}
+                </div>
+                <div className={`flex items-center gap-1 mt-2 text-sm ${metric.color}`}>
+                  {metric.change} from last period
+                </div>
+              </div>
+              <div className="p-3 rounded-lg bg-gray-100 dark:bg-gray-800">
+                {metric.icon}
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
+
+      {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
-          {/* LINE CHART */}
-
-          <div className="h-72 w-full ">
-            <LineChartCard data={lineData} showGrid={showGrid} />
-          </div>
-
-          {/* BAR CHART */}
-
-          <div className="h-72 w-full">
-            <BarChartCard data={barData} showGrid={showGrid} />
-          </div>
+          <LineChartCard 
+            title="User Activity Timeline" 
+            area={true}
+            color="#10B981"
+          />
+          <BarChartCard />
         </div>
 
-        {/* RIGHT SIDEBAR SUMMARY */}
-        <aside className="space-y-4">
-          <Card title="Summary">
-            <div className="text-sm text-gray-600 space-y-2">
-              <div className="flex justify-between">
-                <span>Total Active (peak)</span>
-                <span className="font-medium">
-                  {Math.max(...lineData.map((d) => d.value))}
-                </span>
-              </div>
-
-              <div className="flex justify-between">
-                <span>Total Events</span>
-                <span className="font-medium">
-                  {barData.reduce((s, b) => s + b.count, 0)}
-                </span>
-              </div>
-
-              <div className="flex justify-between">
-                <span>Range</span>
-                <span className="font-medium uppercase">{range}</span>
-              </div>
+        {/* Sidebar */}
+        <div className="space-y-6">
+          <Card title="Quick Filters" className="dark:border-gray-700">
+            <div className="space-y-3">
+              {[
+                { label: "New Users", count: "324" },
+                { label: "Upgrades", count: "42" },
+                { label: "Churned Users", count: "18" },
+                { label: "Trials", count: "156" },
+              ].map((filter, index) => (
+                <button
+                  key={index}
+                  className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                >
+                  <span className="text-gray-700 dark:text-gray-300">{filter.label}</span>
+                  <span className="font-semibold text-gray-900 dark:text-white">{filter.count}</span>
+                </button>
+              ))}
             </div>
+            <Button variant="ghost" className="w-full mt-4 flex items-center justify-center gap-2">
+              <Filter className="w-4 h-4" />
+              More Filters
+            </Button>
           </Card>
 
-          <Card title="Controls">
-            <div className="flex flex-col gap-3">
-              <Button
-                variant="primary"
-                onClick={() => alert("Run report (demo)")}
-              >
-                Run Report
-              </Button>
-
-              <Button
-                variant="ghost"
-                onClick={() => alert("More filters (demo)")}
-              >
-                More Filters
-              </Button>
+          <Card title="Data Sources" className="dark:border-gray-700">
+            <div className="space-y-4">
+              {[
+                { name: "Google Analytics", status: "active", sync: "5 min ago" },
+                { name: "Stripe", status: "active", sync: "2 min ago" },
+                { name: "Segment", status: "syncing", sync: "Just now" },
+                { name: "HubSpot", status: "error", sync: "2 hours ago" },
+              ].map((source, index) => (
+                <div key={index} className="flex items-center justify-between">
+                  <div>
+                    <div className="font-medium text-gray-900 dark:text-gray-100">{source.name}</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">Synced {source.sync}</div>
+                  </div>
+                  <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+                    source.status === 'active' 
+                      ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
+                      : source.status === 'syncing'
+                      ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400'
+                      : 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
+                  }`}>
+                    {source.status}
+                  </div>
+                </div>
+              ))}
             </div>
           </Card>
-        </aside>
+        </div>
       </div>
     </div>
   );

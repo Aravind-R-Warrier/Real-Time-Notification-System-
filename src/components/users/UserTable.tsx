@@ -3,13 +3,7 @@ import React, { useMemo, useState } from "react";
 import { Card } from "../cards/Card";
 import Button from "../ui/Button";
 
-/**
- * Uses localStorage key 'saas.users.v1' seeded by saasSeed.
- * Features:
- * - search
- * - simple pagination
- * - deactivate/reactivate action
- */
+
 
 type User = {
   id: string;

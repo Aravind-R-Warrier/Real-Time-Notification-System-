@@ -1,7 +1,9 @@
+// src/components/layout/Sidebar.tsx
 import React, { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import Footer from "./Footer";
 
 /* Reusable NavItem */
 const NavItem: React.FC<{
@@ -17,8 +19,8 @@ const NavItem: React.FC<{
       className={({ isActive }) =>
         `flex items-center gap-3 px-3 py-2 rounded-md transition-colors text-sm ${
           isActive
-            ? "bg-gray-100 text-gray-900 font-semibold"
-            : "text-gray-600 hover:bg-gray-50"
+            ? "bg-gray-100 dark:bg-slate-700 text-gray-900 dark:text-white font-semibold"
+            : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-800"
         }`
       }
       aria-current={(props: any) => (props.isActive ? "page" : undefined)}
@@ -51,7 +53,7 @@ export default function Sidebar() {
   }, [open]);
 
   const DesktopSidebar = (
-    <aside className="w-72 bg-gradient-to-b from-white to-gray-50 border-r border-gray-200 p-6 hidden lg:flex lg:flex-col h-screen sticky top-0">
+    <aside className="w-72 bg-white dark:bg-slate-900 border-r border-gray-200 dark:border-slate-800 p-6 hidden lg:flex lg:flex-col h-screen sticky top-0">
       {/* Logo */}
       <div className="mb-8">
         <div className="flex items-center gap-3 group">
@@ -72,10 +74,10 @@ export default function Sidebar() {
           </div>
 
           <div>
-            <div className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+            <div className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent dark:bg-none dark:text-white">
               NexusDash
             </div>
-            <div className="text-xs text-gray-500 font-medium">
+            <div className="text-xs text-gray-500 dark:text-gray-400 font-medium">
               Enterprise Analytics
             </div>
           </div>
@@ -84,7 +86,7 @@ export default function Sidebar() {
 
       {/* Nav */}
       <nav className="flex-1 flex flex-col gap-2" aria-label="Main navigation">
-        <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-1">
+        <div className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2 px-1">
           Main Menu
         </div>
 
@@ -126,6 +128,37 @@ export default function Sidebar() {
             </svg>
           }
         />
+        <NavItem
+          to="/users"
+          label="Users"
+          icon={
+            <svg viewBox="0 0 24 24" fill="none" className="w-full h-full">
+              <path
+                d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <circle
+                cx="9"
+                cy="7"
+                r="4"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          }
+        />
 
         <NavItem
           to="/settings"
@@ -138,7 +171,7 @@ export default function Sidebar() {
                 strokeWidth="1.6"
               />
               <path
-                d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a1 1 0 010 1.41 1 1 0 01-1.41 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a1 1 0 01-2 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a1 1 0 01-1.41-1.41l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a1 1 0 110-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a1 1 0 111.41-1.41l.06.06a1.65 1.65 0 001.82.33H7a1.65 1.65 0 001-1.51V3a1 1 0 012 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a1 1 0 011.41 1.41l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a1 1 0 010 2h-.09a1.65 1.65 0 00-1.51 1z"
+                d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a1 1 0 010 1.41 1 1 0 01-1.41 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a1 1 0 01-2 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a1 1 0 01-1.41-1.41l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a1 1 0 110-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a1 1 0 111.41-1.41l.06.06a1.65 1.65 0 001.82.33H7a1.65 1.65 0 001-1.51V3a1 1 0 012 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a1 1 0 011.41 1.41l-.06.06a1 1 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a1 1 0 010 2h-.09a1.65 1.65 0 00-1.51 1z"
                 stroke="currentColor"
                 strokeWidth="1.2"
               />
@@ -149,7 +182,7 @@ export default function Sidebar() {
 
       {/* Tools */}
       <div className="mt-8">
-        <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-1">
+        <div className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2 px-1">
           Tools
         </div>
         <nav className="flex flex-col gap-2">
@@ -180,6 +213,7 @@ export default function Sidebar() {
           />
         </nav>
       </div>
+      
     </aside>
   );
 
@@ -193,10 +227,10 @@ export default function Sidebar() {
         <button
           onClick={() => setOpen(true)}
           aria-label="Open menu"
-          className="p-2 rounded-md bg-white shadow-md hover:shadow-lg focus:outline-none"
+          className="p-2 rounded-md bg-white dark:bg-slate-800 shadow-md hover:shadow-lg focus:outline-none"
         >
           <svg
-            className="w-5 h-5 text-gray-700"
+            className="w-5 h-5 text-gray-700 dark:text-gray-200"
             viewBox="0 0 24 24"
             fill="none"
           >
@@ -220,16 +254,16 @@ export default function Sidebar() {
               animate={{ opacity: 0.35 }}
               exit={{ opacity: 0 }}
               onClick={() => setOpen(false)}
-              className="fixed inset-0 bg-black z-40"
+              className="fixed inset-0 bg-black/60 dark:bg-black/60 z-40"
             />
 
             {/* Drawer */}
             <motion.aside
               initial={{ x: "-100%" }}
-              animate={{ x: 0 }} 
-              exit={{ x: "-100%" }} 
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="fixed left-0 top-0 h-full w-72 bg-white z-50 shadow-2xl p-4"
+              className="fixed left-0 top-0 h-full w-72 bg-white dark:bg-slate-900 z-50 shadow-2xl p-4"
               ref={drawerRef}
               tabIndex={-1}
               aria-label="Mobile menu"
@@ -240,17 +274,17 @@ export default function Sidebar() {
                     M
                   </div>
                   <div>
-                    <div className="text-lg font-bold">NexusDash</div>
-                    <div className="text-xs text-gray-500">Analytics</div>
+                    <div className="text-lg font-bold text-gray-900 dark:text-white">NexusDash</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">Analytics</div>
                   </div>
                 </div>
 
                 <button
                   onClick={() => setOpen(false)}
                   aria-label="Close menu"
-                  className="p-2 rounded-md hover:bg-gray-100 transition focus:outline-none"
+                  className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-slate-800 transition focus:outline-none"
                 >
-                  <X className="w-5 h-5 text-gray-600" />
+                  <X className="w-5 h-5 text-gray-600 dark:text-gray-200" />
                 </button>
               </div>
 
@@ -274,7 +308,7 @@ export default function Sidebar() {
                   label="Settings"
                   icon={<span className="w-5 h-5" />}
                 />
-                <div className="mt-4 border-t pt-4">
+                <div className="mt-4 border-t border-gray-100 dark:border-slate-800 pt-4">
                   <NavItem
                     to="/help"
                     label="Help Center"
@@ -282,6 +316,7 @@ export default function Sidebar() {
                   />
                 </div>
               </nav>
+              
             </motion.aside>
           </>
         )}

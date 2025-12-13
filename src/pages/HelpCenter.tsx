@@ -1,103 +1,104 @@
+// src/pages/HelpCenter.tsx
 import React, { useState } from 'react';
+import { Card } from '../components/cards/Card';
 import { 
   Search, MessageCircle, FileText, Video, Mail, ChevronRight, 
   ExternalLink, HelpCircle, BookOpen, Shield, Users, Clock,
   Zap, Star, TrendingUp, Globe, Phone, Calendar, Send,
   ThumbsUp, ThumbsDown, Download, Settings, BarChart,
-  Bell, CreditCard, Grid, AlertCircle
+  Bell, CreditCard, Grid, AlertCircle, LifeBuoy
 } from 'lucide-react';
 
-// FAQ Data
+// FAQ Data - SaaS specific
 const faqCategories = [
   {
     title: 'Getting Started',
     icon: '🚀',
-    iconColor: 'text-purple-600 bg-purple-100',
+    iconColor: 'text-purple-600 bg-purple-100 dark:text-purple-400 dark:bg-purple-900/20',
     questions: [
       { 
         id: 1, 
-        question: 'How do I set up my dashboard?', 
-        answer: 'Navigate to Settings > Dashboard Setup and follow the step-by-step guide. You can customize widgets, arrange layouts, and connect data sources.' 
+        question: 'How do I set up my SaaS dashboard?', 
+        answer: 'Navigate to Settings > Dashboard Setup and follow the step-by-step guide. You can customize widgets, arrange layouts, and connect data sources like Stripe, Google Analytics, and more.' 
       },
       { 
         id: 2, 
-        question: 'What permissions do I need?', 
-        answer: 'Admin users have full access. Editors can modify content but not settings. Viewers have read-only access. Contact your workspace admin for permission changes.' 
+        question: 'What user roles and permissions are available?', 
+        answer: 'We offer three roles: Admin (full access), Editor (can modify content but not settings), and Viewer (read-only access). Contact your workspace admin for permission changes.' 
       },
       { 
         id: 3, 
-        question: 'How to invite team members?', 
-        answer: 'Go to Team Management > Invite Members. Enter email addresses and assign roles. They\'ll receive an email invitation.' 
+        question: 'How to invite team members to the dashboard?', 
+        answer: 'Go to Team Management > Invite Members. Enter email addresses and assign roles. They\'ll receive an email invitation with setup instructions.' 
       },
     ],
   },
   {
-    title: 'Analytics',
+    title: 'Analytics & Reports',
     icon: '📊',
-    iconColor: 'text-blue-600 bg-blue-100',
+    iconColor: 'text-blue-600 bg-blue-100 dark:text-blue-400 dark:bg-blue-900/20',
     questions: [
       { 
         id: 4, 
         question: 'How to create custom reports?', 
-        answer: 'Use the Report Builder in Analytics section. Drag-and-drop metrics, apply filters, and schedule automatic generation.' 
+        answer: 'Use the Report Builder in Analytics section. Drag-and-drop metrics, apply filters, and schedule automatic generation. Reports can be exported as CSV, PDF, or scheduled for email delivery.' 
       },
       { 
         id: 5, 
-        question: 'Data refresh frequency?', 
-        answer: 'Real-time data updates every 15 minutes. Historical data refreshes daily at 2 AM UTC. You can manually refresh anytime.' 
+        question: 'What\'s the data refresh frequency?', 
+        answer: 'Real-time data updates every 5 minutes for critical metrics. Historical data refreshes daily at 2 AM UTC. You can manually refresh anytime using the refresh button.' 
       },
       { 
         id: 6, 
-        question: 'Exporting data to CSV/Excel', 
-        answer: 'Click the export button on any report. Choose format and date range. For large exports, use scheduled exports.' 
+        question: 'How to export data to CSV/Excel?', 
+        answer: 'Click the export button on any report. Choose format and date range. For large exports exceeding 10k rows, use our scheduled export feature available in Business plans.' 
       },
     ],
   },
   {
-    title: 'Notifications',
-    icon: '🔔',
-    iconColor: 'text-green-600 bg-green-100',
+    title: 'Billing & Subscriptions',
+    icon: '💰',
+    iconColor: 'text-green-600 bg-green-100 dark:text-green-400 dark:bg-green-900/20',
     questions: [
       { 
         id: 7, 
-        question: 'Setting up alert thresholds', 
-        answer: 'Go to Notifications > Alert Rules. Define conditions, thresholds, and notification channels (email, Slack, in-app).' 
+        question: 'How do I upgrade my subscription plan?', 
+        answer: 'Navigate to Settings > Billing > Plans. Select your desired plan and follow the upgrade flow. Pro-rated charges will be applied automatically.' 
       },
       { 
         id: 8, 
-        question: 'Managing notification preferences', 
-        answer: 'Each user can customize preferences in Profile > Notifications. Team-wide defaults are set by admins.' 
+        question: 'Can I get an invoice for my payment?', 
+        answer: 'Yes, all invoices are available in Settings > Billing > Invoices. You can download PDF invoices or have them automatically emailed each billing cycle.' 
+      },
+      { 
+        id: 9, 
+        question: 'What payment methods do you accept?', 
+        answer: 'We accept all major credit cards (Visa, MasterCard, American Express), PayPal, and bank transfers for annual Enterprise plans.' 
       },
     ],
   },
   {
-    title: 'Importants',
-    icon: '❗',
-    iconColor: 'text-green-600 bg-green-100',
+    title: 'API & Integrations',
+    icon: '🔌',
+    iconColor: 'text-orange-600 bg-orange-100 dark:text-orange-400 dark:bg-orange-900/20',
     questions: [
       { 
-        id: 7, 
-        question: 'Setting up alert thresholds', 
-        answer: 'Go to Notifications > Alert Rules. Define conditions, thresholds, and notification channels (email, Slack, in-app).' 
+        id: 10, 
+        question: 'How do I generate API keys?', 
+        answer: 'Go to Settings > API Keys. Click "Generate New Key", name it, and select permissions. Keep your keys secure and never commit them to version control.' 
       },
       { 
-        id: 8, 
-        question: 'Managing notification preferences', 
-        answer: 'Each user can customize preferences in Profile > Notifications. Team-wide defaults are set by admins.' 
+        id: 11, 
+        question: 'What integrations are available?', 
+        answer: 'We integrate with Stripe, PayPal, Google Analytics, Slack, Salesforce, HubSpot, Mailchimp, Zapier, and more. See our Integrations directory for the complete list.' 
       },
       { 
-        id: 4, 
-        question: 'How to create custom reports?', 
-        answer: 'Use the Report Builder in Analytics section. Drag-and-drop metrics, apply filters, and schedule automatic generation.' 
-      },
-      { 
-        id: 5, 
-        question: 'Data refresh frequency?', 
-        answer: 'Real-time data updates every 15 minutes. Historical data refreshes daily at 2 AM UTC. You can manually refresh anytime.' 
+        id: 12, 
+        question: 'How to set up webhooks?', 
+        answer: 'Navigate to Settings > Webhooks. Add your endpoint URL, select events to subscribe to, and test the configuration. We support retry logic for failed deliveries.' 
       },
     ],
   },
- 
 ];
 
 // Feature Cards
@@ -113,7 +114,7 @@ const featureCards = [
   {
     icon: <FileText className="w-6 h-6" />,
     title: 'Documentation',
-    description: 'Comprehensive guides',
+    description: 'Comprehensive guides & API docs',
     count: '200+ articles',
     color: 'bg-blue-500',
     link: '/docs'
@@ -121,7 +122,7 @@ const featureCards = [
   {
     icon: <Users className="w-6 h-6" />,
     title: 'Community',
-    description: 'Connect with users',
+    description: 'Connect with other SaaS founders',
     count: '5k+ members',
     color: 'bg-green-500',
     link: '/community'
@@ -156,12 +157,12 @@ const contactMethods = [
     time: '9 AM - 6 PM EST'
   },
   {
-    title: 'Phone Support',
-    description: 'Direct conversation',
-    icon: <Phone className="w-5 h-5" />,
+    title: 'Priority Support',
+    description: 'For Enterprise plans',
+    icon: <Shield className="w-5 h-5" />,
     action: '+1 (555) 123-4567',
     color: 'from-purple-500 to-purple-600',
-    time: 'Mon-Fri, 9 AM - 5 PM'
+    time: '24/7 for Enterprise'
   },
   {
     title: 'Schedule Call',
@@ -173,8 +174,6 @@ const contactMethods = [
   },
 ];
 
-
-
 export default function HelpCenter() {
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedQuestion, setExpandedQuestion] = useState<number | null>(null);
@@ -183,57 +182,66 @@ export default function HelpCenter() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Searching for:', searchQuery);
+    if (searchQuery.trim()) {
+      alert(`Searching for: ${searchQuery}`);
+    }
   };
 
   const markHelpful = (id: number, helpful: boolean) => {
     setHelpfulFeedback(prev => ({...prev, [id]: helpful}));
+    setTimeout(() => {
+      alert('Thank you for your feedback!');
+    }, 300);
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50/30">
-    
+  const popularSearches = ['Dashboard Setup', 'Data Export', 'Team Permissions', 'Billing Issues', 'API Keys', 'User Management'];
 
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50/30 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
       {/* Hero Section */}
       <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-transparent to-purple-500/5" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-transparent to-purple-500/5 dark:from-blue-500/10 dark:via-transparent dark:to-purple-500/10" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-8">
           <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              How can we <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">help</span> you today?
+            <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 rounded-full bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 text-sm font-medium">
+              <LifeBuoy className="w-4 h-4" />
+              Help Center
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+              How can we <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">help</span> you today?
             </h1>
-            <p className="text-lg text-gray-600 mb-8">
+            <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
               Get instant answers, browse documentation, or connect with our support team
             </p>
             
             {/* Search Bar */}
             <form onSubmit={handleSearch} className="relative max-w-2xl mx-auto">
-              <div className="relative shadow-xl rounded-2xl overflow-hidden">
-                <Search className="absolute left-6 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <div className="relative shadow-xl rounded-2xl overflow-hidden dark:shadow-gray-900/50">
+                <Search className="absolute left-6 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 w-5 h-5" />
                 <input
                   type="text"
                   placeholder="Describe your issue or search for answers..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-14 pr-32 py-4 bg-white text-gray-900 placeholder-gray-500 focus:outline-none text-lg"
+                  className="w-full pl-14 pr-32 py-4 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none text-lg border-0"
                 />
                 <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center gap-2">
                   <button
                     type="submit"
-                    className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium rounded-xl hover:shadow-lg transition-all hover:scale-[1.02]"
+                    className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-500 dark:to-indigo-500 text-white font-medium rounded-xl hover:shadow-lg transition-all hover:scale-[1.02]"
                   >
                     Search
                   </button>
                 </div>
               </div>
               <div className="flex flex-wrap justify-center gap-3 mt-4">
-                <span className="text-sm text-gray-500 font-medium">Popular:</span>
-                {['Dashboard Setup', 'Data Export', 'Team Permissions', 'Billing', 'API Keys'].map((term) => (
+                <span className="text-sm text-gray-500 dark:text-gray-400 font-medium">Popular:</span>
+                {popularSearches.map((term) => (
                   <button
                     key={term}
                     type="button"
                     onClick={() => setSearchQuery(term)}
-                    className="text-sm px-4 py-1.5 bg-white border border-gray-200 text-gray-700 rounded-full hover:border-blue-300 hover:text-blue-600 transition-all hover:scale-105 shadow-sm"
+                    className="text-sm px-4 py-1.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:border-blue-300 dark:hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-all hover:scale-105 shadow-sm"
                   >
                     {term}
                   </button>
@@ -248,20 +256,20 @@ export default function HelpCenter() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
-            { icon: <Clock className="w-5 h-5" />, value: '98%', label: 'Satisfaction Rate', color: 'text-green-600' },
-            { icon: <Zap className="w-5 h-5" />, value: '15 min', label: 'Avg Response', color: 'text-blue-600' },
-            { icon: <Users className="w-5 h-5" />, value: '24/7', label: 'Support Available', color: 'text-purple-600' },
-            { icon: <BookOpen className="w-5 h-5" />, value: '500+', label: 'Articles', color: 'text-orange-600' },
+            { icon: <Clock className="w-5 h-5" />, value: '98%', label: 'Satisfaction Rate', color: 'text-green-600 dark:text-green-400' },
+            { icon: <Zap className="w-5 h-5" />, value: '15 min', label: 'Avg Response Time', color: 'text-blue-600 dark:text-blue-400' },
+            { icon: <Users className="w-5 h-5" />, value: '24/7', label: 'Support Available', color: 'text-purple-600 dark:text-purple-400' },
+            { icon: <BookOpen className="w-5 h-5" />, value: '500+', label: 'Articles & Guides', color: 'text-orange-600 dark:text-orange-400' },
           ].map((stat, index) => (
-            <div key={index} className="bg-white rounded-xl p-5 border border-gray-200 hover:shadow-md transition-shadow">
+            <Card key={index} className="hover:shadow-md transition-shadow">
               <div className="flex items-center gap-3 mb-2">
-                <div className={`p-2 rounded-lg ${stat.color} bg-opacity-10`}>
+                <div className={`p-2 rounded-lg ${stat.color} bg-opacity-10 dark:bg-opacity-20`}>
                   {stat.icon}
                 </div>
                 <div className={`text-2xl font-bold ${stat.color}`}>{stat.value}</div>
               </div>
-              <div className="text-sm text-gray-600">{stat.label}</div>
-            </div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">{stat.label}</div>
+            </Card>
           ))}
         </div>
       </div>
@@ -273,8 +281,8 @@ export default function HelpCenter() {
             {/* Feature Cards */}
             <div className="mb-10">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">Quick Access</h2>
-                <button className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Quick Access</h2>
+                <button className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium flex items-center gap-1">
                   View all resources <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
@@ -283,22 +291,22 @@ export default function HelpCenter() {
                   <a
                     key={index}
                     href={card.link}
-                    className="group bg-white rounded-xl border border-gray-200 p-5 hover:shadow-lg hover:border-blue-300 transition-all duration-300 hover:-translate-y-1"
+                    className="group bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-500 transition-all duration-300 hover:-translate-y-1"
                   >
                     <div className="flex items-start justify-between mb-4">
-                      <div className={`p-3 rounded-lg ${card.color} bg-opacity-10`}>
+                      <div className={`p-3 rounded-lg ${card.color} bg-opacity-10 dark:bg-opacity-20`}>
                         <div className={card.color.replace('bg-', 'text-')}>
                           {card.icon}
                         </div>
                       </div>
-                      <div className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                      <div className="text-xs font-medium text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
                         {card.count}
                       </div>
                     </div>
-                    <h3 className="font-bold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">
+                    <h3 className="font-bold text-gray-900 dark:text-white mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                       {card.title}
                     </h3>
-                    <p className="text-sm text-gray-600">{card.description}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">{card.description}</p>
                   </a>
                 ))}
               </div>
@@ -307,8 +315,8 @@ export default function HelpCenter() {
             {/* FAQ Section */}
             <div className="mb-10">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">Frequently Asked Questions</h2>
-                <div className="text-sm text-gray-500">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Frequently Asked Questions</h2>
+                <div className="text-sm text-gray-500 dark:text-gray-400">
                   {faqCategories.flatMap(c => c.questions).length} questions
                 </div>
               </div>
@@ -319,8 +327,8 @@ export default function HelpCenter() {
                   onClick={() => setActiveCategory('all')}
                   className={`flex-shrink-0 px-4 py-2.5 rounded-xl font-medium transition-all ${
                     activeCategory === 'all'
-                      ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg'
-                      : 'bg-white border border-gray-300 text-gray-700 hover:border-gray-400'
+                      ? 'bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-500 dark:to-indigo-500 text-white shadow-lg'
+                      : 'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-gray-400 dark:hover:border-gray-600'
                   }`}
                 >
                   All Categories
@@ -331,8 +339,8 @@ export default function HelpCenter() {
                     onClick={() => setActiveCategory(cat.title)}
                     className={`flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all ${
                       activeCategory === cat.title
-                        ? 'bg-white border-2 border-blue-500 text-blue-700 shadow-sm'
-                        : 'bg-white border border-gray-300 text-gray-700 hover:border-gray-400'
+                        ? 'bg-white dark:bg-gray-800 border-2 border-blue-500 dark:border-blue-400 text-blue-700 dark:text-blue-300 shadow-sm'
+                        : 'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-gray-400 dark:hover:border-gray-600'
                     }`}
                   >
                     <span className="text-lg">{cat.icon}</span>
@@ -351,40 +359,40 @@ export default function HelpCenter() {
                         <div className={`p-2 rounded-lg ${category.iconColor}`}>
                           <span className="text-lg">{category.icon}</span>
                         </div>
-                        <h3 className="text-xl font-bold text-gray-900">{category.title}</h3>
+                        <h3 className="text-xl font-bold text-gray-900 dark:text-white">{category.title}</h3>
                       </div>
                       <div className="space-y-3">
                         {category.questions.map((item) => (
                           <div
                             key={item.id}
-                            className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-all"
+                            className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-all"
                           >
                             <button
                               onClick={() => setExpandedQuestion(expandedQuestion === item.id ? null : item.id)}
-                              className="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 transition-colors"
+                              className="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
                             >
                               <div className="flex-1">
-                                <h4 className="font-semibold text-gray-900 text-lg">{item.question}</h4>
+                                <h4 className="font-semibold text-gray-900 dark:text-white text-lg">{item.question}</h4>
                               </div>
                               <ChevronRight
-                                className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                                className={`w-5 h-5 text-gray-400 dark:text-gray-500 transition-transform duration-200 ${
                                   expandedQuestion === item.id ? 'rotate-90' : ''
                                 }`}
                               />
                             </button>
                             {expandedQuestion === item.id && (
-                              <div className="px-6 pb-6 pt-2 border-t border-gray-100">
-                                <p className="text-gray-600 mb-6">{item.answer}</p>
+                              <div className="px-6 pb-6 pt-2 border-t border-gray-100 dark:border-gray-700">
+                                <p className="text-gray-600 dark:text-gray-300 mb-6">{item.answer}</p>
                                 <div className="flex items-center justify-between">
                                   <div className="flex items-center gap-4">
-                                    <span className="text-sm text-gray-500">Was this helpful?</span>
+                                    <span className="text-sm text-gray-500 dark:text-gray-400">Was this helpful?</span>
                                     <div className="flex gap-2">
                                       <button
                                         onClick={() => markHelpful(item.id, true)}
                                         className={`p-2 rounded-lg ${
                                           helpfulFeedback[item.id] === true
-                                            ? 'bg-green-100 text-green-700'
-                                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                            ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
+                                            : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
                                         }`}
                                       >
                                         <ThumbsUp className="w-4 h-4" />
@@ -393,15 +401,15 @@ export default function HelpCenter() {
                                         onClick={() => markHelpful(item.id, false)}
                                         className={`p-2 rounded-lg ${
                                           helpfulFeedback[item.id] === false
-                                            ? 'bg-red-100 text-red-700'
-                                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                            ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
+                                            : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
                                         }`}
                                       >
                                         <ThumbsDown className="w-4 h-4" />
                                       </button>
                                     </div>
                                   </div>
-                                  <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                                  <button className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium">
                                     Share article <ExternalLink className="w-3 h-3 inline ml-1" />
                                   </button>
                                 </div>
@@ -470,44 +478,44 @@ export default function HelpCenter() {
             </div>
 
             {/* Status Widget */}
-            <div className="bg-white rounded-2xl border border-gray-200 p-6">
+            <Card title="System Status">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-bold text-gray-900">System Status</h3>
-                <div className="flex items-center gap-2 bg-green-50 text-green-700 px-3 py-1 rounded-full">
+                <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                  <span className="text-sm font-medium">All Systems Operational</span>
+                  <span className="text-sm font-medium text-green-600 dark:text-green-400">All Systems Operational</span>
                 </div>
+                <div className="text-xs text-gray-500 dark:text-gray-400">Updated just now</div>
               </div>
               <div className="space-y-4">
                 {[
                   { service: 'API Gateway', status: 'operational', uptime: '99.9%' },
                   { service: 'Analytics Engine', status: 'operational', uptime: '99.8%' },
                   { service: 'Database Cluster', status: 'operational', uptime: '99.9%' },
-                  { service: 'Notification Service', status: 'degraded', uptime: '95.2%' },
+                  { service: 'Notification Service', status: 'operational', uptime: '99.7%' },
+                  { service: 'Payment Processing', status: 'operational', uptime: '99.9%' },
                 ].map((item, index) => (
                   <div key={index} className="flex items-center justify-between">
                     <div>
-                      <div className="font-medium text-gray-900">{item.service}</div>
-                      <div className="text-xs text-gray-500">{item.uptime} uptime</div>
+                      <div className="font-medium text-gray-900 dark:text-white">{item.service}</div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400">{item.uptime} uptime</div>
                     </div>
                     <div className={`px-3 py-1 rounded-full text-sm font-medium ${
                       item.status === 'operational' 
-                        ? 'bg-green-100 text-green-700' 
-                        : 'bg-yellow-100 text-yellow-700'
+                        ? 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400' 
+                        : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400'
                     }`}>
                       {item.status}
                     </div>
                   </div>
                 ))}
               </div>
-              <a href="/status" className="block mt-6 text-center text-sm text-blue-600 hover:text-blue-700 font-medium border-t border-gray-100 pt-4">
+              <a href="/status" className="block mt-6 text-center text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium border-t border-gray-100 dark:border-gray-700 pt-4">
                 View detailed status report
               </a>
-            </div>
+            </Card>
 
             {/* Quick Actions */}
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">Quick Actions</h3>
+            <Card title="Quick Actions">
               <div className="space-y-3">
                 {[
                   { icon: <Send className="w-4 h-4" />, label: 'Submit Ticket', color: 'bg-blue-500' },
@@ -517,23 +525,24 @@ export default function HelpCenter() {
                 ].map((action, index) => (
                   <button
                     key={index}
-                    className="w-full flex items-center gap-3 p-3 bg-white rounded-lg hover:shadow-md transition-all hover:-translate-y-0.5"
+                    className="w-full flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all hover:-translate-y-0.5"
+                    onClick={() => alert(`Opening: ${action.label}`)}
                   >
                     <div className={`p-2 rounded-lg ${action.color}`}>
                       <div className="text-white">{action.icon}</div>
                     </div>
-                    <span className="font-medium text-gray-900">{action.label}</span>
-                    <ChevronRight className="w-4 h-4 text-gray-400 ml-auto" />
+                    <span className="font-medium text-gray-900 dark:text-white">{action.label}</span>
+                    <ChevronRight className="w-4 h-4 text-gray-400 dark:text-gray-500 ml-auto" />
                   </button>
                 ))}
               </div>
-            </div>
+            </Card>
           </div>
         </div>
 
         {/* Bottom CTA */}
         <div className="mt-16 mb-12">
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 p-10 text-center">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 dark:from-blue-700 dark:via-blue-600 dark:to-indigo-700 p-10 text-center">
             <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-white/10 to-transparent rounded-full -translate-y-32 translate-x-32" />
             <div className="relative">
               <h2 className="text-3xl font-bold text-white mb-4">Still need help?</h2>
@@ -541,10 +550,16 @@ export default function HelpCenter() {
                 Our dedicated support team is here to help you with any questions or issues you might have.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="px-8 py-4 bg-white text-blue-700 rounded-xl font-bold hover:shadow-2xl transition-all hover:scale-[1.02]">
+                <button 
+                  className="px-8 py-4 bg-white text-blue-700 rounded-xl font-bold hover:shadow-2xl transition-all hover:scale-[1.02]"
+                  onClick={() => alert('Opening support ticket form...')}
+                >
                   Submit Support Ticket
                 </button>
-                <button className="px-8 py-4 bg-white/10 backdrop-blur-sm text-white border-2 border-white/30 rounded-xl font-bold hover:bg-white/20 transition-all">
+                <button 
+                  className="px-8 py-4 bg-white/10 backdrop-blur-sm text-white border-2 border-white/30 rounded-xl font-bold hover:bg-white/20 transition-all"
+                  onClick={() => alert('Opening calendar to schedule call...')}
+                >
                   Schedule a Call
                 </button>
               </div>
@@ -552,8 +567,6 @@ export default function HelpCenter() {
           </div>
         </div>
       </div>
-
-  
     </div>
   );
 }

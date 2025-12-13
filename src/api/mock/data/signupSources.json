@@ -1,0 +1,66 @@
+[
+  {
+    "name": "Organic",
+    "count": 1420,
+    "percentage": 45.2,
+    "change": "+12.5%",
+    "color": "#2563EB",
+    "description": "Direct website visits and word-of-mouth"
+  },
+  {
+    "name": "Google Ads",
+    "count": 980,
+    "percentage": 31.3,
+    "change": "+8.2%",
+    "color": "#3B82F6",
+    "description": "Paid search campaigns"
+  },
+  {
+    "name": "Social Media",
+    "count": 680,
+    "percentage": 21.8,
+    "change": "+15.7%",
+    "color": "#60A5FA",
+    "description": "Facebook, Instagram, Twitter"
+  },
+  {
+    "name": "Referral",
+    "count": 450,
+    "percentage": 14.4,
+    "change": "+5.3%",
+    "color": "#93C5FD",
+    "description": "Partner referrals and affiliates"
+  },
+  {
+    "name": "Email Campaigns",
+    "count": 820,
+    "percentage": 26.2,
+    "change": "+3.8%",
+    "color": "#BFDBFE",
+    "description": "Newsletter and marketing emails"
+  },
+  {
+    "name": "Content Marketing",
+    "count": 320,
+    "percentage": 10.2,
+    "change": "+22.1%",
+    "color": "#DBEAFE",
+    "description": "Blog posts and articles"
+  },
+  {
+    "name": "Events",
+    "count": 180,
+    "percentage": 5.8,
+    "change": "+18.4%",
+    "color": "#EFF6FF",
+    "description": "Webinars and conferences"
+  },
+  {
+    "name": "Partnerships",
+    "count": 240,
+    "percentage": 7.7,
+    "change": "+9.6%",
+    "color": "#F1F5F9",
+    "description": "Strategic partnerships"
+  }
+]

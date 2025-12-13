@@ -1,251 +1,224 @@
+// src/pages/Settings.tsx
 import React, { useEffect, useRef, useState } from "react";
 import Button from "../components/ui/Button";
-import { useLocalStorage } from "../hooks/useLocalStorage";
 import { Card } from "../components/cards/Card";
-
-/**
- * Settings Page
- * - Theme persists and is applied to document.documentElement
- * - Notification sound preview implemented via Web Audio API (no external file)
- * - useLocalStorage hook used for persistence
- */
-
-type SettingsState = {
-  theme: "light" | "dark";
-  enableNotifications: boolean;
-  playSound: boolean;
-  compactMode: boolean;
-};
-
-const DEFAULTS: SettingsState = {
-  theme: "light",
-  enableNotifications: true,
-  playSound: true,
-  compactMode: false,
-};
-
-/**
- * small WebAudio beep for preview/notifications
- */
-function playBeep(duration = 0.12, frequency = 880, type: OscillatorType = "sine") {
-  try {
-    const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
-    const o = ctx.createOscillator();
-    const g = ctx.createGain();
-    o.type = type;
-    o.frequency.value = frequency;
-    o.connect(g);
-    g.connect(ctx.destination);
-
-    const now = ctx.currentTime;
-    g.gain.setValueAtTime(0.0001, now);
-    g.gain.exponentialRampToValueAtTime(0.2, now + 0.01);
-    o.start(now);
-    g.gain.exponentialRampToValueAtTime(0.0001, now + duration);
-    o.stop(now + duration + 0.02);
-
-    // close context after sound finished (good for iOS / mobile)
-    setTimeout(() => {
-      try {
-        ctx.close();
-      } catch {}
-    }, (duration + 0.1) * 1000);
-  } catch (e) {
-    // fallback: no audio available
-    console.warn("WebAudio not available", e);
-  }
-}
+import { Bell, Moon, Sun, Volume2, VolumeX, LayoutGrid, Save, RotateCcw } from "lucide-react";
+import { useSettings } from "../hooks/useSettings";
+import { useNotifications } from "../components/notifications/useNotifications";
+import { motion } from "framer-motion";
 
 export default function Settings() {
-  const [state, setState] = useLocalStorage<SettingsState>("app.settings.v1", DEFAULTS);
-  // UI-only transient flag to show preview played
+  const { settings, updateSettings, resetSettings, setTheme, setSoundVolume } = useSettings();
+  const { playTestSound: playNotificationTestSound } = useNotifications();
   const [previewPlaying, setPreviewPlaying] = useState(false);
   const previewTimerRef = useRef<number | null>(null);
 
-  // apply theme on mount and whenever state.theme changes
-  useEffect(() => {
-    const root = document.documentElement;
-    if (state.theme === "dark") root.classList.add("dark");
-    else root.classList.remove("dark");
-  }, [state.theme]);
-
-  // helper to toggle boolean keys
-  function toggle<K extends keyof SettingsState>(key: K) {
-    setState((prev) => ({ ...prev, [key]: !prev[key] }));
-  }
-
-  function setTheme(theme: SettingsState["theme"]) {
-    setState((prev) => ({ ...prev, theme }));
-    // effect will apply the class; keep immediate UX in sync
-    if (theme === "dark") document.documentElement.classList.add("dark");
-    else document.documentElement.classList.remove("dark");
-  }
-
-  function resetDefaults() {
-    setState(DEFAULTS);
-    document.documentElement.classList.remove("dark");
-  }
-
-  // Play notification preview (observes enableNotifications + playSound)
-  function handlePlayPreview() {
-    if (!state.enableNotifications) {
-      // small user feedback: can't play because notifications disabled
-      setPreviewPlaying(true);
-      window.setTimeout(() => setPreviewPlaying(false), 800);
+  const handleSoundPreview = () => {
+    if (!settings.enableNotifications) {
+      alert("Enable notifications first to hear the sound");
       return;
     }
+    
+    setPreviewPlaying(true);
+    playNotificationTestSound();
+    
+    if (previewTimerRef.current) clearTimeout(previewTimerRef.current);
+    previewTimerRef.current = window.setTimeout(() => setPreviewPlaying(false), 800);
+  };
 
-    if (state.playSound) {
-      setPreviewPlaying(true);
-      playBeep(0.14, 880, "sine");
-      // stop preview flag after short interval
-      if (previewTimerRef.current) window.clearTimeout(previewTimerRef.current);
-      previewTimerRef.current = window.setTimeout(() => setPreviewPlaying(false), 300);
-    } else {
-      // if sound disabled, do a visual flash
-      setPreviewPlaying(true);
-      if (previewTimerRef.current) window.clearTimeout(previewTimerRef.current);
-      previewTimerRef.current = window.setTimeout(() => setPreviewPlaying(false), 300);
-    }
-  }
-
-  // Cleanup timers when unmount
   useEffect(() => {
     return () => {
-      if (previewTimerRef.current) window.clearTimeout(previewTimerRef.current);
+      if (previewTimerRef.current) clearTimeout(previewTimerRef.current);
     };
   }, []);
+
+  const toggleSetting = (key: keyof typeof settings) => {
+    updateSettings({ [key]: !settings[key] });
+  };
+
+  // FIX: Prevent creating test notifications when changing volume
+  const handleVolumeChange = (value: number) => {
+    setSoundVolume(value);
+    // Don't trigger any notification sound here
+  };
 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-semibold">Settings</h2>
-        <p className="text-sm text-gray-500 mt-1">Customize application preferences.</p>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Settings</h2>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          Customize your dashboard experience
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card title="Appearance">
-          <div className="space-y-3">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Appearance */}
+        <Card title="Appearance" className="dark:border-gray-700">
+          <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <div>
-                <div className="font-medium">Theme</div>
-                <div className="text-sm text-gray-500">Switch between light and dark</div>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setTheme("light")}
-                  aria-pressed={state.theme === "light"}
-                  className={`px-3 py-1 rounded-md text-sm transition ${
-                    state.theme === "light" ? "bg-gray-100" : "bg-transparent"
-                  }`}
-                >
-                  Light
-                </button>
-                <button
-                  onClick={() => setTheme("dark")}
-                  aria-pressed={state.theme === "dark"}
-                  className={`px-3 py-1 rounded-md text-sm transition ${
-                    state.theme === "dark" ? "bg-gray-800 text-white" : "bg-transparent"
-                  }`}
-                >
-                  Dark
-                </button>
-                <div className="ml-3 text-sm text-gray-500">
-                  {state.theme === "dark" ? "Dark mode active" : "Light mode"}
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700">
+                  {settings.theme === 'dark' ? (
+                    <Moon className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                  ) : (
+                    <Sun className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                  )}
+                </div>
+                <div>
+                  <div className="font-medium text-gray-900 dark:text-gray-100">Theme</div>
+                  <div className="text-sm text-gray-500 dark:text-gray-400">Choose your preferred theme</div>
                 </div>
               </div>
+              <select
+                value={settings.theme}
+                onChange={(e) => setTheme(e.target.value as any)}
+                className="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-gray-100"
+              >
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+                <option value="system">System</option>
+              </select>
             </div>
 
             <div className="flex items-center justify-between">
-              <div>
-                <div className="font-medium">Compact Mode</div>
-                <div className="text-sm text-gray-500">Reduce spacing for dense content</div>
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700">
+                  <LayoutGrid className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                </div>
+                <div>
+                  <div className="font-medium text-gray-900 dark:text-gray-100">Layout Density</div>
+                  <div className="text-sm text-gray-500 dark:text-gray-400">Control spacing and layout</div>
+                </div>
               </div>
-              <label className="inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={state.compactMode}
-                  onChange={() => toggle("compactMode")}
-                  className="h-4 w-4"
-                />
-              </label>
+              <select
+                value={settings.layoutDensity}
+                onChange={(e) => updateSettings({ layoutDensity: e.target.value as any })}
+                className="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-gray-100"
+              >
+                <option value="comfortable">Comfortable</option>
+                <option value="compact">Compact</option>
+              </select>
             </div>
           </div>
         </Card>
 
-        <Card title="Notifications">
-          <div className="space-y-3">
+        {/* Notifications */}
+        <Card title="Notifications" className="dark:border-gray-700">
+          <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <div>
-                <div className="font-medium">Enable Notifications</div>
-                <div className="text-sm text-gray-500">Receive notifications from the app</div>
-              </div>
-              <label className="inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={state.enableNotifications}
-                  onChange={() => toggle("enableNotifications")}
-                  className="h-4 w-4"
-                />
-              </label>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="font-medium">Play Sound</div>
-                <div className="text-sm text-gray-500">Play sound when notification arrives</div>
-              </div>
-              <label className="inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={state.playSound}
-                  onChange={() => toggle("playSound")}
-                  className="h-4 w-4"
-                />
-              </label>
-            </div>
-
-            <div className="pt-2 border-t mt-2">
-              <div className="text-sm text-gray-600 mb-2">Notification preview</div>
-              <div className="p-3 rounded-md bg-gray-50 dark:bg-slate-800 transition-colors">
-                <div className="flex items-start gap-3">
-                  <div className="w-9 h-9 rounded-md bg-blue-600 text-white flex items-center justify-center font-bold">N</div>
-                  <div className="flex-1">
-                    <div className="font-medium">Sample notification</div>
-                    <div className="text-xs text-gray-500 dark:text-gray-300">This message simulates how notifications will appear.</div>
-                  </div>
-                  <div className="flex flex-col items-end gap-2">
-                    <button
-                      onClick={handlePlayPreview}
-                      className="px-3 py-1 rounded-md text-sm bg-indigo-600 text-white"
-                      aria-label="Play notification preview"
-                    >
-                      Play preview
-                    </button>
-                    <div className={`text-xs ${previewPlaying ? "text-green-600" : "text-gray-400"}`}>
-                      {previewPlaying ? "Previewing…" : state.enableNotifications ? (state.playSound ? "Sound enabled" : "Sound off") : "Notifications disabled"}
-                    </div>
-                  </div>
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30">
+                  <Bell className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                </div>
+                <div>
+                  <div className="font-medium text-gray-900 dark:text-gray-100">Enable Notifications</div>
+                  <div className="text-sm text-gray-500 dark:text-gray-400">Receive real-time updates</div>
                 </div>
               </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={settings.enableNotifications}
+                  onChange={() => toggleSetting('enableNotifications')}
+                  className="sr-only peer"
+                />
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+              </label>
             </div>
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700">
+                  {settings.playSound ? (
+                    <Volume2 className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                  ) : (
+                    <VolumeX className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                  )}
+                </div>
+                <div>
+                  <div className="font-medium text-gray-900 dark:text-gray-100">Notification Sound</div>
+                  <div className="text-sm text-gray-500 dark:text-gray-400">Play sound for new notifications</div>
+                </div>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={settings.playSound}
+                  onChange={() => toggleSetting('playSound')}
+                  className="sr-only peer"
+                />
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+              </label>
+            </div>
+
+          
           </div>
         </Card>
       </div>
+
+      {/* Sound Preview */}
+      <Card title="Sound Preview" className="dark:border-gray-700">
+        <div className="p-4 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/10 dark:to-indigo-900/10">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <div className="font-medium text-gray-900 dark:text-gray-100">Test Notification Sound</div>
+              <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                Preview how notifications will sound when they arrive
+              </div>
+              <div className="flex items-center gap-2 mt-2 text-xs text-gray-500 dark:text-gray-400">
+                <div className={`w-2 h-2 rounded-full ${settings.playSound ? 'bg-green-500' : 'bg-gray-400'}`} />
+                {settings.playSound ? 'Sound enabled' : 'Sound disabled'}
+              </div>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Button
+                onClick={handleSoundPreview}
+                variant="primary"
+                disabled={!settings.enableNotifications}
+                className="flex items-center gap-2"
+              >
+                <Bell className="w-4 h-4" />
+                Play Preview
+              </Button>
+              {/* REMOVED: Second button that was causing issues */}
+            </div>
+          </div>
+          {previewPlaying && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-3 p-3 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800"
+            >
+              <div className="flex items-center gap-2 text-green-700 dark:text-green-400">
+                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                Playing notification sound at {settings.soundVolume}% volume...
+              </div>
+            </motion.div>
+          )}
+        </div>
+      </Card>
 
       <div className="flex items-center gap-3">
         <Button
           variant="primary"
           onClick={() => {
-            // In production you would call an API to save preferences server-side
-            alert("Settings saved (local demo)");
+            alert("Settings saved successfully!");
           }}
+          className="flex items-center gap-2"
         >
-          Save Settings
+          <Save className="w-4 h-4" />
+          Save Changes
         </Button>
-        <Button variant="outline" onClick={() => resetDefaults()}>
-          Reset Defaults
+        <Button
+          variant="outline"
+          onClick={() => {
+            resetSettings();
+            document.documentElement.classList.remove('dark');
+          }}
+          className="flex items-center gap-2"
+        >
+          <RotateCcw className="w-4 h-4" />
+          Reset to Defaults
         </Button>
       </div>
     </div>
