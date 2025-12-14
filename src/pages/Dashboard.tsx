@@ -9,6 +9,7 @@ import LineChartCard from "../components/analytics/LineChartCard";
 import BarChartCard from "../components/analytics/BarChartCard";
 import { fetchAnalyticsBundle } from "../api/mock/analytics";
 import ActivityLog from '../components/activity/ActivityLog';
+import PageHeader from "../components/layout/PageHeader";
 
 
 export default function Dashboard() {
@@ -64,10 +65,10 @@ const metricCards = [
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-300">Dashboard Overview</h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-          Welcome back! Here's what's happening with your SaaS today.
-        </p>
+          <PageHeader
+        title="Dashboard Overview"
+        description="Welcome back! Here's what's happening with your SaaS today."
+      />
       </div>
 
       {/* Metrics Grid */}

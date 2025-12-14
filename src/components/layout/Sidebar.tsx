@@ -23,7 +23,6 @@ const NavItem: React.FC<{
             : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-800"
         }`
       }
-      aria-current={(props: any) => (props.isActive ? "page" : undefined)}
     >
       {icon && <span className="w-5 h-5">{icon}</span>}
       <span>{label}</span>

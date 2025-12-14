@@ -15,9 +15,10 @@ import {
   upgradeSubscription,
   downloadInvoice,
 } from "../api/mock/billingApi";
+import PageHeader from "../components/layout/PageHeader";
 
 const PlanIcon = ({ planId }: { planId: string }) => {
-  const icons: Record<string, JSX.Element> = {
+  const icons: Record<string, React.ReactNode> = {
     starter: <Sparkles className="w-5 h-5" />,
     professional: <Zap className="w-5 h-5" />,
     enterprise: <Crown className="w-5 h-5" />,
@@ -56,12 +57,10 @@ export default function ModernBilling() {
       <div className="max-w-7xl mx-auto space-y-8 sm:space-y-12">
         {/* Header */}
         <div className="text-center px-2">
-          <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            Billing & Subscription
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2 text-sm sm:text-base">
-            Manage your plan, payment method and invoices
-          </p>
+          <PageHeader
+            title="Billing & Subscription"
+            description="Manage your plan, payment method and invoices."
+          />
         </div>
 
         {/* Current Subscription */}

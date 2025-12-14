@@ -188,13 +188,31 @@ export default function ActivityLog({
               setRefreshing(true);
               loadData(false);
             }}
+            className="
+    dark:text-gray-200
+    dark:hover:bg-gray-700
+  "
           >
             <RefreshCw
-              className={`w-4 h-4 ${refreshing ? "animate-spin" : ""}`}
+              className={`w-4 h-4 text-current ${
+                refreshing ? "animate-spin" : ""
+              }`}
             />
           </Button>
-          <Button variant="outline" size="sm" onClick={exportCSV}>
-            <Download className="w-4 h-4" /> Export
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={exportCSV}
+            className="
+    dark:border-gray-600
+    dark:text-gray-200
+    dark:hover:bg-gray-700
+    dark:hover:border-gray-500
+  "
+          >
+            <Download className="w-4 h-4" />
+            <span className="ml-1">Export</span>
           </Button>
         </div>
       }
@@ -202,7 +220,13 @@ export default function ActivityLog({
       {/* Filters */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
         <select
-          className="input"
+          className="
+    input
+    dark:bg-gray-800
+    dark:border-gray-600
+    dark:text-gray-200
+    dark:focus:border-gray-500
+  "
           value={selectedSeverity}
           onChange={(e) => setSelectedSeverity(e.target.value)}
         >
@@ -214,7 +238,13 @@ export default function ActivityLog({
         </select>
 
         <select
-          className="input"
+          className="
+    input
+    dark:bg-gray-800
+    dark:border-gray-600
+    dark:text-gray-200
+    dark:focus:border-gray-500
+  "
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
         >
@@ -226,7 +256,13 @@ export default function ActivityLog({
         </select>
 
         <select
-          className="input"
+          className="
+    input
+    dark:bg-gray-800
+    dark:border-gray-600
+    dark:text-gray-200
+    dark:focus:border-gray-500
+  "
           value={timeRange}
           onChange={(e) => setTimeRange(e.target.value)}
         >
@@ -243,87 +279,92 @@ export default function ActivityLog({
             setSelectedCategory("");
             setTimeRange("today");
           }}
+          className="
+    dark:border-gray-600
+    dark:text-gray-200
+    dark:hover:bg-gray-700
+    dark:hover:border-gray-500
+  "
         >
           Clear
         </Button>
       </div>
 
-    {/* Activity List */}
-<div className="space-y-3">
-  {loading ? (
-    Array.from({ length: limit }).map((_, i) => (
-      <div
-        key={i}
-        className="flex items-start gap-3 p-4 border rounded-lg animate-pulse"
-      >
-        {/* Skeleton icon */}
-        <div className="w-10 h-10 bg-gray-200 rounded-lg shrink-0" />
+      {/* Activity List */}
+      <div className="space-y-3">
+        {loading ? (
+          Array.from({ length: limit }).map((_, i) => (
+            <div
+              key={i}
+              className="flex items-start gap-3 p-4 border rounded-lg animate-pulse"
+            >
+              {/* Skeleton icon */}
+              <div className="w-10 h-10 bg-gray-200 rounded-lg shrink-0" />
 
-        <div className="flex-1 space-y-2">
-          <div className="h-4 bg-gray-200 rounded w-2/3" />
-          <div className="h-3 bg-gray-200 rounded w-1/2" />
-        </div>
-      </div>
-    ))
-  ) : activities.length === 0 ? (
-    <div className="text-center py-10 text-gray-500">
-      <ActivityIcon className="mx-auto mb-2" />
-      No activity found
-    </div>
-  ) : (
-    activities.map((a) => (
-      <div
-        key={a.id}
-        className="flex flex-col sm:flex-row sm:items-center sm:justify-between
+              <div className="flex-1 space-y-2">
+                <div className="h-4 bg-gray-200 rounded w-2/3" />
+                <div className="h-3 bg-gray-200 rounded w-1/2" />
+              </div>
+            </div>
+          ))
+        ) : activities.length === 0 ? (
+          <div className="text-center py-10 text-gray-500">
+            <ActivityIcon className="mx-auto mb-2" />
+            No activity found
+          </div>
+        ) : (
+          activities.map((a) => (
+            <div
+              key={a.id}
+              className="flex flex-col sm:flex-row sm:items-center sm:justify-between
                    gap-4 p-4 border rounded-lg hover:shadow-sm transition"
-      >
-        {/* Left side */}
-        <div className="flex items-start gap-3 min-w-0">
-          {/* Icon */}
-          <div
-            className={`w-10 h-10 flex items-center justify-center
+            >
+              {/* Left side */}
+              <div className="flex items-start gap-3 min-w-0">
+                {/* Icon */}
+                <div
+                  className={`w-10 h-10 flex items-center justify-center
                         rounded-lg shrink-0 ${severityBg(a.severity)}`}
-          >
-            {severityIcon(a.severity)}
-          </div>
+                >
+                  {severityIcon(a.severity)}
+                </div>
 
-          {/* Content */}
-          <div className="min-w-0">
-            <div className="font-medium text-sm line-clamp-2">
-              {a.action}
+                {/* Content */}
+                <div className="min-w-0">
+                  <div className="font-medium text-sm line-clamp-2">
+                    {a.action}
+                  </div>
+
+                  <div className="text-sm text-gray-500 line-clamp-2">
+                    {a.description}
+                  </div>
+
+                  <div className="flex flex-wrap gap-2 mt-2 text-xs text-gray-500">
+                    <span>{formatTime(a.timestamp)}</span>
+                    <span>by {a.user}</span>
+
+                    <span className="px-2 py-0.5 rounded bg-gray-100">
+                      {a.category}
+                    </span>
+
+                    <span className="px-2 py-0.5 rounded bg-gray-100 capitalize">
+                      {a.severity}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right time */}
+              <div className="text-xs sm:text-sm text-gray-500 shrink-0">
+                {new Date(a.timestamp).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </div>
             </div>
-
-            <div className="text-sm text-gray-500 line-clamp-2">
-              {a.description}
-            </div>
-
-            <div className="flex flex-wrap gap-2 mt-2 text-xs text-gray-500">
-              <span>{formatTime(a.timestamp)}</span>
-              <span>by {a.user}</span>
-
-              <span className="px-2 py-0.5 rounded bg-gray-100">
-                {a.category}
-              </span>
-
-              <span className="px-2 py-0.5 rounded bg-gray-100 capitalize">
-                {a.severity}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Right time */}
-        <div className="text-xs sm:text-sm text-gray-500 shrink-0">
-          {new Date(a.timestamp).toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-        </div>
+          ))
+        )}
       </div>
-    ))
-  )}
-</div>
-
     </Card>
   );
 }

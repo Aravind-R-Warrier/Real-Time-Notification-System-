@@ -1,73 +1,77 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern SaaS-style Admin Dashboard built with React + TypeScript, featuring real-time simulated notifications, analytics charts, and a clean responsive UI.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## React Compiler
+Features-
+--------
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Real-Time Notification System
 
-## Expanding the ESLint configuration
+Simulated live notifications (mock service)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Read / unread states
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Mark all as read
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Delete notifications
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Persistent unread count (localStorage)
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Notification sound on new message
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Smooth animations (Framer Motion)
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+csv Downloads 
+
+
+Tech Stack-
+-----------
+
+React 19
+
+TypeScript
+
+React Router DOM
+
+Tailwind CSS
+
+Framer Motion
+
+Recharts
+
+Lucide Icons
+
+UUID
+
+
+Depended Libs
+-------------
+{
+  "react": "^19.2.0",
+  "react-dom": "^19.2.0",
+  "react-router-dom": "^7.10.1",
+  "tailwindcss": "^4.1.17",
+  "framer-motion": "^12.23.26",
+  "recharts": "^3.5.1",
+  "lucide-react": "^0.560.0",
+  "uuid": "^13.0.0"
+}
+
+
+Project Structure
+-----------------
+src/
+├── api/mock/        # Mock APIs & local JSON data
+├── components/      # Reusable UI components
+├── hooks/           # Custom hooks
+├── pages/           # Dashboard, Analytics, Settings, Help
+├── routes/          # App routing
+├── types/           # TypeScript types
+├── App.tsx
+└── main.tsx
+
+For Running Project After cloning-
+-------          --------
+npm install
+npm run dev

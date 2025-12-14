@@ -15,6 +15,7 @@ import {
 import { useSettings } from "../hooks/useSettings";
 import { useNotifications } from "../components/notifications/useNotifications";
 import { motion } from "framer-motion";
+import PageHeader from "../components/layout/PageHeader";
 
 export default function Settings() {
   const { settings, updateSettings, resetSettings, setTheme, setSoundVolume } =
@@ -58,12 +59,10 @@ export default function Settings() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Settings
-        </h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-          Customize your dashboard experience
-        </p>
+        <PageHeader
+          title="Settings"
+          description=" Customize your dashboard experience."
+        />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
