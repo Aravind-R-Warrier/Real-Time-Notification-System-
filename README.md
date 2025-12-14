@@ -24,6 +24,8 @@ Smooth animations (Framer Motion)
 
 csv Downloads 
 
+Dark mode
+
 
 Tech Stack-
 -----------
