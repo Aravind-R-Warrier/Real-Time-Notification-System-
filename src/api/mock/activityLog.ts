@@ -1,24 +1,7 @@
 import activityLogData from './data/activityLog.json';
+import type {ActivityLog,ActivityStats} from '../../types/activity'
 
-export interface ActivityLog {
-  id: string;
-  action: string;
-  description: string;
-  user: string;
-  userId: string | null;
-  timestamp: string;
-  severity: 'success' | 'error' | 'warning' | 'info';
-  category: string;
-  [key: string]: any; // Additional dynamic properties
-}
 
-export interface ActivityStats {
-  totalActivities: number;
-  bySeverity: Record<string, number>;
-  byCategory: Record<string, number>;
-  todayCount: number;
-  lastHourCount: number;
-}
 
 class ActivityLogService {
   private data: ActivityLog[] = activityLogData as ActivityLog[];

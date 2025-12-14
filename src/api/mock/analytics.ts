@@ -1,12 +1,6 @@
-export type LinePoint = {
-  time: string;
-  value: number;
-};
+import type {LinePoint,BarPoint} from '../../types/chartTypes'
 
-export type BarPoint = {
-  name: string;
-  count: number;
-};
+
 
 type AnalyticsBundle = {
   line: LinePoint[];

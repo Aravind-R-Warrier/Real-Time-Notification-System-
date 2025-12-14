@@ -22,7 +22,7 @@ import {
   Users,
 } from "lucide-react";
 import Button from "../ui/Button";
-import type { User } from "../../pages/Users";
+import type { User } from "../../types/user";
 
 const PAGE_SIZE = 10;
 
@@ -33,7 +33,7 @@ interface Props {
 
 /* ---------- Plan Icon ---------- */
 const PlanIcon = ({ plan }: { plan: string }) => {
-  const icons: Record<string, JSX.Element> = {
+  const icons: Record<string, React.ReactNode> = {
     enterprise: <Crown className="w-4 h-4 text-purple-600" />,
     business: <Zap className="w-4 h-4 text-blue-600" />,
     pro: <Sparkles className="w-4 h-4 text-emerald-600" />,

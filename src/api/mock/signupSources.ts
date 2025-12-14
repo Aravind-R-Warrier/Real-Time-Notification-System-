@@ -1,14 +1,7 @@
 import signupSourcesData from './data/signupSources.json';
+import type { SignupSource } from '../../types/signUpsource';
 
-// Define the interface
-export interface SignupSource {
-  name: string;
-  count: number;
-  percentage: number;
-  change: string;
-  color: string;
-  description: string;
-}
+
 
 // Cast the imported JSON data to the correct type
 const typedData: SignupSource[] = signupSourcesData as SignupSource[];

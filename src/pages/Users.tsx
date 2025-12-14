@@ -25,15 +25,9 @@ import {
   Sparkles,
 } from "lucide-react";
 import PageHeader from "../components/layout/PageHeader";
+import type  {User}  from "../types/user";
 
-type User = {
-  id: string;
-  name: string;
-  email: string;
-  createdAt: string;
-  active: boolean;
-  plan: string;
-};
+
 
 function toCSV(rows: Record<string, any>[]) {
   if (!rows || rows.length === 0) return "";
